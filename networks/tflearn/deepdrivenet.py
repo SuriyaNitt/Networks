@@ -105,7 +105,7 @@ def threeD_conv_net_two_streams(depth, rows, cols, batch_size):
                              learning_rate=0.1)
     return net
 
-def threeD_conv_net_single_stream(depth, rows, cols, batch_size):
+def threeD_conv_net_single_stream(depth, rows, cols, batch_size, lr, myMetric):
     # Building Residual Network
     net = tflearn.input_data(shape=[None, depth, rows, cols, 3])
     net = tflearn.conv_3d(net, 4, 3, activation='relu', bias=False)
@@ -127,7 +127,7 @@ def threeD_conv_net_single_stream(depth, rows, cols, batch_size):
     #leaky_relu = tflearn.leaky_relu(net, alpha=0.2)
     net = tflearn.fully_connected(net, 2, activation='prelu')
     #net = tflearn.activations.leaky_relu(net, alpha=0.2)
-    net = tflearn.regression(net, optimizer='adam',
+    net = tflearn.regression(net,  metric=myMetric, optimizer='adam',
                              loss='mean_square',
-                             learning_rate=0.1)
+                             learning_rate=lr)
     return net
